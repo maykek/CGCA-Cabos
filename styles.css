@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+
+}
+
+canvas {
+    width: 400px;
+    height: 200;
+    margin: 5px auto;
+}
+
+input[type="file"] {
+    display: block;
+    margin-top: 5px;
+}
+
+input[type="text"] {
+    display: block;
+    margin-top: 5px;
+}
+
+codigoInput {
+    text-align: center;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
