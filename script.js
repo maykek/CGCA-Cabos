@@ -268,13 +268,16 @@ function buscarCodigo(codigoBuscado) {
         return;
     }
 
-    axios.get('./Cabos-Elétricos.txt')
+    fetch('Cabos-Elétricos.txt')
         .then(response => {
-            // Axios já retorna os dados em response.data (como string)
-            const data = response.data;
+            if (!response.ok) {
+                throw new Error('Erro ao carregar o arquivo');
+            }
+            return response.text();
+        })
+        .then(data => {
             const linhas = data.split('\n'); // Divide o conteúdo em linhas
 
-            let resultado = null; // Inicializa resultado como null
 
             // Itera sobre cada linha para encontrar o código
             for (let linha of linhas) {
@@ -283,7 +286,7 @@ function buscarCodigo(codigoBuscado) {
                 const circuito = partes.find(info => info.includes('P/'));
 
                 if (circuito) {
-                    const [origemP, destinoP] = circuito.split('P/').map(str => str.trim());
+                    const [origemP, destinoP] = circuito.split('P/').map(str => str.trim())
                     origem = origemP;
                     destino = destinoP;
                 }
@@ -304,7 +307,6 @@ function buscarCodigo(codigoBuscado) {
                     break; // Para a busca se o código for encontrado
                 }
             }
-
             // Exibe o resultado
             if (resultado) {
                 isol1 = resultado.matIsol;
@@ -316,33 +318,28 @@ function buscarCodigo(codigoBuscado) {
                     } else if (tipoCabo == 2) {
                         isol = 'XLPE';
                         criarTabela(resultado);
-                    } else {
-                        console.error('Tipo de cabo inválido');
-                    }
-                } else {
-                    isol = isol1;
-                    cabo();
-                }
+                    } else (Error)
+                } else { isol = isol1; cabo() }
                 // Chama a função para criar a tabela com o resultado
+
             } else {
                 if (window.confirm("Código não encontrado. Deseja Cadastrar?")) {
                     window.open("relatório.html");
                 }
             }
-
-            if (resultado && resultado.Tag == '') {
+            if (resultado.Tag == '') {
                 tag1 = document.getElementById('tag').value;
                 tag = `${resultado.CAE}-${tag1}-${Data}`;
                 tagCad = `${resultado.Tag}`;
-            } else if (resultado) {
+            } else {
                 tag = `${resultado.CAE}_${resultado.Tag}_${Data}`;
                 tagCad = `${resultado.Tag}`;
             }
         })
         .catch(error => {
-            console.error('Erro ao carregar ou processar o arquivo:', error);
+            console.error('Erro:', error);
         });
-}
+    }
 
 function cabo() {
     if (isol1 == 'XLPE') {
@@ -364,7 +361,7 @@ function criticidade(codigoBuscado) {
         return;
     }
 
-    axios.get("./Criticidade dos equipamentos.txt")
+    fetch("Criticidade dos equipamentos.txt")
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erro ao carregar o arquivo');
@@ -395,7 +392,6 @@ function criticidade(codigoBuscado) {
 
 
 }
-
 
 // Função para criar a tabela
 function criarTabela(resultado) {
